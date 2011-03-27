@@ -310,7 +310,7 @@
   (usb-set-altinterface*
    handle
    (if (pointerp setting-or-number)
-       (usb-inteface-setting-get-alternate setting-or-number)
+       (usb-interface-setting-get-alternate setting-or-number)
        setting-or-number)))
 
 (defun usb-get-vendor-id (device)
