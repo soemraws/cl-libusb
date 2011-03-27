@@ -385,7 +385,7 @@
 			  bytes-to-read timeout)))
     (if (< bytes-read 0)
 	(error 'libusb-error :text "Bulk read failed.")
-	(slice buffer `(:range 0 ,(- bytes-read 1))))))
+	(grid:slice buffer `((:range 0 ,(- bytes-read 1)))))))
 
 ;;; Interrupt transfers
 (defun usb-interrupt-write (handle endpoint buffer timeout)
@@ -419,7 +419,7 @@
 			       bytes-to-read timeout)))
     (if (< bytes-read 0)
 	(error 'libusb-error :text "Interrupt read failed.")
-	(slice buffer `(:range 0 ,(- bytes-read 1))))))
+	(grid:slice buffer `((:range 0 ,(- bytes-read 1)))))))
 
 (defun endpoint-in-p (endpoint)
   "Check if an endpoint is an in endpoint (and thus can be read from)."
