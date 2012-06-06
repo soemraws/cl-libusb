@@ -7,7 +7,7 @@
   :name "libusb-ffi"
   :description "Common Lisp FFI bindings to libusb-0.1."
   :serial t
-  :depends-on (#:cffi #:cffi-grovel #:grid #:foreign-array)
+  :depends-on (#:cffi #:cffi-grovel #:antik)
   :components ((:file "package")
 	       (cffi-grovel:grovel-file "libusb-grovel")
                (:file "libusb-ffi")))
