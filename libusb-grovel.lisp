@@ -75,9 +75,9 @@
 (cstruct device "struct usb_device"
 	 (next "next" :type :pointer)
 	 (previous "prev" :type :pointer)
-	 (descriptor "descriptor" :type device-descriptor)
+	 (descriptor "descriptor" :type (:pointer (:struct device-descriptor)))
 	 (configuration "config" :type :pointer)
 	 (number-of-children "num_children" :type :uint8)
 	 (children "children" :type :pointer))
 
-(ctype :size-t "size_t")
+(ctype size-t "size_t")
