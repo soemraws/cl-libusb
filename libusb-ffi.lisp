@@ -290,7 +290,7 @@
   (usb-claim-interface*
    handle
    (if (pointerp setting-or-number)
-       (usb-setting-interface-get-number setting-or-number)
+       (usb-interface-setting-get-number setting-or-number)
        setting-or-number)))
 
 (defun usb-release-interface (handle setting-or-number)
