@@ -369,8 +369,7 @@
   bytes written."
   (unless (integerp endpoint)
     (setf endpoint (usb-endpoint-get-address endpoint)))
-  (let* ((bytes-to-write (grid:dim0 buffer))
-	 (bytes-written
+  (let* ((bytes-written
 	  (usb-bulk-write* handle endpoint
 			   (grid::foreign-pointer buffer)
 			   (grid:dim0 buffer) timeout)))
