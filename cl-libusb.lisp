@@ -111,7 +111,7 @@
 		  :test #'=)
 	(libusb-ffi:usb-release-interface handle-pointer number)
 	(setf claimed-interfaces (delete number claimed-interfaces :test #'=))
-	(refresh-finalization device)))))
+	(usb-rebuild-finalization device)))))
 
 (defun usb-set-altinterface (device setting-or-number)
   "Set the alternate interface setting to that of the given
