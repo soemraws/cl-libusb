@@ -15,6 +15,14 @@
 (defctype device-ptr :pointer)
 (defctype device-handle-ptr :pointer)
 
+(defctype bus (:struct bus))
+(defctype endpoint-descriptor (:struct endpoint-descriptor))
+(defctype setting (:struct setting))
+(defctype interface (:struct interface))
+(defctype configuration (:struct configuration))
+(defctype device-descriptor (:struct device-descriptor))
+(defctype device (:struct device))
+
 (defcfun (usb-init* "usb_init") :void)
 
 (defcfun (usb-find-busses* "usb_find_busses") :int)
@@ -36,14 +44,14 @@
   (handle device-handle-ptr)
   (index :int)
   (buffer :pointer)
-  (buffer-size :size-t))
+  (buffer-size size-t))
 
 (defcfun (usb-get-string* "usb_get_string") :int
   (handle device-handle-ptr)
   (index :int)
   (language-id :int)
   (buffer :pointer)
-  (buffer-size :size-t))
+  (buffer-size size-t))
 
 (defcfun (usb-claim-interface* "usb_claim_interface") :int
   (handle device-handle-ptr)
