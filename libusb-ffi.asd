@@ -6,6 +6,7 @@
 (asdf:defsystem #:libusb-ffi
   :name "libusb-ffi"
   :description "Common Lisp FFI bindings to libusb-0.1."
+  :author "Sumant Oemrawsingh"
   :serial t
   :depends-on (#:cffi #:cffi-grovel #:antik)
   :components ((:file "package")
