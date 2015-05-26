@@ -10,3 +10,6 @@ libusb-ffi (and thus cl-libusb) is not complete, but should be usable.
 Tested and found to work on:
 linux amd64 (sbcl)
 Windows XP Professional 32-bit (clisp, mingw)
+
+To do: Antik is larger than what cl-libusb requires; use static-vectors
+instead.
