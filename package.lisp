@@ -29,6 +29,7 @@
 	   #:usb-bulk-write
 	   #:usb-interrupt-read
 	   #:usb-interrupt-write
+           #:usb-control-msg
 
 	   #:usb-claim-interface
 	   #:usb-release-interface
@@ -55,6 +56,7 @@
 	   #:usb-bulk-write
 	   #:usb-interrupt-read
 	   #:usb-interrupt-write
+           #:usb-control-msg
 
 	   #:usb-get-vendor-id
 	   #:usb-get-product-id

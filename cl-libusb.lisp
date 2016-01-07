@@ -164,6 +164,9 @@
   (libusb-ffi:usb-interrupt-write (usb-handle-pointer device)
 			    endpoint buffer timeout))
 
+(defun usb-control-msg (device requesttype request value index buffer timeout)
+  (libusb-ffi:usb-control-msg (usb-handle-pointer device) requesttype request value index buffer timeout))
+
 (defun usb-clear-halt (device endpoint)
   "Clear the halt flag on the given endpoint of the device."
   (libusb-ffi:usb-clear-halt (usb-handle-pointer device) endpoint))

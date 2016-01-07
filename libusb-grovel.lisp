@@ -38,6 +38,35 @@
 	      ((:endpoint-audio "USB_DT_ENDPOINT_AUDIO_SIZE"))
 	      ((:hub-nonvar "USB_DT_HUB_NONVAR_SIZE")))
 
+(constantenum request
+              ((:get-status "USB_REQ_GET_STATUS"))
+              ((:clear-feature "USB_REQ_CLEAR_FEATURE"))
+              ((:set-feature "USB_REQ_SET_FEATURE"))
+              ((:set-address "USB_REQ_SET_ADDRESS"))
+              ((:get-descriptor "USB_REQ_GET_DESCRIPTOR"))
+              ((:set-descriptor "USB_REQ_SET_DESCRIPTOR"))
+              ((:get-configuration "USB_REQ_GET_CONFIGURATION"))
+              ((:set-configuration "USB_REQ_SET_CONFIGURATION"))
+              ((:get-interface "USB_REQ_GET_INTERFACE"))
+              ((:set-interface "USB_REQ_SET_INTERFACE"))
+              ((:synch-frame "USB_REQ_SYNCH_FRAME")))
+              
+(constantenum type
+              ((:standard "USB_TYPE_STANDARD"))
+              ((:class "USB_TYPE_CLASS"))
+              ((:vendor "USB_TYPE_VENDOR"))
+              ((:reserved "USB_TYPE_RESERVED")))
+
+(constantenum recip
+              ((:device "USB_RECIP_DEVICE"))
+              ((:interface "USB_RECIP_INTERFACE"))
+              ((:endpoint "USB_RECIP_ENDPOINT"))
+              ((:other "USB_RECIP_OTHER")))
+
+(constantenum endpoint
+              ((:in "USB_ENDPOINT_IN"))
+              ((:out "USB_ENDPOINT_OUT")))
+
 (cstruct bus "struct usb_bus"
 	 (next "next" :type :pointer)
 	 (previous "prev" :type :pointer)
