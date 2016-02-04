@@ -104,6 +104,16 @@
   (size :int)
   (timeout :int))
 
+(defcfun (usb-control-msg* "usb_control_msg") :int
+  (handle device-handle-ptr)
+  (requesttype :int)
+  (request :int)
+  (value :int)
+  (index :int)
+  (bytes :pointer)
+  (size :int)
+  (timeout :int))
+
 ;;;; Somewhat cleaned up interface
 
 ;;; Errors
@@ -427,6 +437,17 @@
     (if (< bytes-read 0)
 	(error 'libusb-error :text "Interrupt read failed.")
 	(grid:slice buffer `((:range 0 ,(- bytes-read 1)))))))
+
+(defun usb-control-msg (handle requesttype request value index buffer timeout)
+  (let* ((bytes-to-write (grid:dim0 buffer))
+         (bytes-written
+          (usb-control-msg* handle requesttype request value index
+                            (grid::foreign-pointer buffer)
+                            bytes-to-write timeout)))
+    (if (< bytes-written 0)
+        (error 'libusb-error :text "Control message failed.")
+        bytes-written)))
+    
 
 (defun endpoint-in-p (endpoint)
   "Check if an endpoint is an in endpoint (and thus can be read from)."
