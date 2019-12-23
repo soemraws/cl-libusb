@@ -2,7 +2,24 @@ cl-libusb provides an easy interface to libusb-0.1. There are two
 systems/packages: libusb-ffi, which provides a (somewhat lispified)
 ffi to libusb-0.1, and cl-libusb, which provides an easier interface.
 
-Buffers are dealt with using unsigned byte static vectors. 
+Buffers are dealt with using unsigned byte static vectors. Converting
+existing software to use static vectors instead of foreign arrays
+should be straight-forward:
+1. In your project, make sure to use static-vectors instead of antik
+   and grid,
+2. If you call USB-BULK-WRITE or USB-INTERRUPT-WRITE, make sure the
+   buffer is a static vector instead of a foreign array:
+   Instead of (GRID:MAKE-FOREIGN-ARRAY '(UNSIGNED-BYTE 8) :DIMENSIONS LENGTH)
+   to make the array, use (STATIC-VECTORS:MAKE-STATIC-VECTOR LENGTH) and
+   fill the array as if it is a normal common lisp array. After the
+   call to -WRITE functions, make sure to use STATIC-VECTORS:FREE-STATIC-VECTOR
+   to ensure the memory will be freed.
+3. If you call USB-BULK-READ or USB-INTERRUPT-READ, be aware that the
+   buffer is a static vector instead of a foreign array:
+   The returned array can be simply be used as if it is a normal common
+   lisp array for reading / parsing the output of the -READ functions.
+   Make sure to use STATIC-VECTORS:FREE-STATIC-VECTOR to ensure that the
+   associated memory will be freed.
 
 libusb-ffi (and thus cl-libusb) is not complete, but should be usable.
 
