@@ -142,24 +142,24 @@
 
 (defun usb-bulk-read (device endpoint bytes-to-read timeout)
   "Read the given amount of bytes in a bulk transfer and return the
-  buffer (a foreign array)."
+  buffer (a static vector)."
   (libusb-ffi:usb-bulk-read (usb-handle-pointer device)
 			    endpoint bytes-to-read timeout))
 
 (defun usb-bulk-write (device endpoint buffer timeout)
-  "Write data in the given buffer (a foreign array) in a bulk transfer
+  "Write data in the given buffer (a static vector) in a bulk transfer
   and return the amount of bytes actually written."
   (libusb-ffi:usb-bulk-write (usb-handle-pointer device)
 			    endpoint buffer timeout))
 
 (defun usb-interrupt-read (device endpoint bytes-to-read timeout)
   "Read the given amount of bytes in an interrupt transfer and return
-  the buffer (a foreign array)."
+  the buffer (a static vector)."
   (libusb-ffi:usb-interrupt-read (usb-handle-pointer device)
 			    endpoint bytes-to-read timeout))
 
 (defun usb-interrupt-write (device endpoint buffer timeout)
-  "Write data in the given buffer (a foreign array) in an interrupt
+  "Write data in the given buffer (a static vector) in an interrupt
   transfer and return the amount of bytes actually written."
   (libusb-ffi:usb-interrupt-write (usb-handle-pointer device)
 			    endpoint buffer timeout))
