@@ -114,6 +114,17 @@
   (size :int)
   (timeout :int))
 
+(defcfun (usb-get-driver-np "usb_get_driver_np") :int
+  (handle device-handle-ptr)
+  (interface :int)
+  (name :pointer)
+  (name-len :int))
+
+(defcfun (usb-detach-kernel-driver-np* "usb_detach_kernel_driver_np") :int
+  (handle device-handle-ptr)
+  (interface :int))
+
+
 ;;;; Somewhat cleaned up interface
 
 ;;; Errors
@@ -338,6 +349,13 @@
 (defun usb-get-product-id (device)
   "Returns the product id of the device."
   (foreign-slot-value (usb-device-get-descriptor device) 'device-descriptor 'id-product))
+
+(defun usb-get-driver-name (dev)
+  "Returns the name of the driver currently assigned to this device."
+  (with-foreign-pointer-as-string ((buffer buffer-size) 128 :encoding :utf-8)
+    (let ((result (usb-get-driver-np dev 0 buffer 31)))
+      (when (< result 0)
+	(error 'libusb-error :text "Error getting usb driver.")))))
 
 ;;; Control transfers
 (defun usb-get-string-index (device string-symbol)

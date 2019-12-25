@@ -22,7 +22,9 @@
 	   #:usb-interface-setting-get-alternate
 	   #:usb-interface-setting-get-endpoints
 	   #:usb-endpoint-get-address
-	   
+	   #:usb-get-driver-name
+	   #:usb-detach-kernel-driver-np*
+
 	   #:usb-get-string-index
 	   #:usb-get-string
 	   #:usb-bulk-read
@@ -67,5 +69,7 @@
 	   #:usb-set-configuration
 	   #:usb-set-alt-interface
 	   #:usb-simple-setup
+	   #:usb-get-driver-name
+	   #:usb-detach-kernel-driver-np
 
 	   #:usb-clear-halt))

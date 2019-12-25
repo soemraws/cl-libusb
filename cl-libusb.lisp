@@ -140,6 +140,12 @@
     (usb-claim-interface device setting)
     (usb-set-altinterface device setting)))
 
+(defun usb-get-driver-name (dev)
+  (libusb-ffi:usb-get-driver-name (usb-handle-pointer dev)))
+
+(defun usb-detach-kernel-driver-np (dev interface)
+  (libusb-ffi:usb-detach-kernel-driver-np* (usb-handle-pointer dev) interface))
+
 (defun usb-bulk-read (device endpoint bytes-to-read timeout)
   "Read the given amount of bytes in a bulk transfer and return the
   buffer (a foreign array)."
