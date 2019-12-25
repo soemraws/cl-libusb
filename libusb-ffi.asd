@@ -8,7 +8,7 @@
   :description "Common Lisp FFI bindings to libusb-0.1."
   :author "Sumant Oemrawsingh"
   :serial t
-  :depends-on (#:cffi #:cffi-grovel #:antik)
+  :depends-on (#:cffi #:cffi-grovel #:static-vectors)
   :components ((:file "package")
 	       (cffi-grovel:grovel-file "libusb-grovel")
                (:file "libusb-ffi")))

@@ -390,17 +390,30 @@
 
 
 ;;; Bulk transfers
+
+(defun return-static-buffer-with-length (buffer bytes-read)
+  (cond
+    ((> bytes-read (array-dimension buffer 0)) (error 'libusb-error :text "Buffer overflow."))
+    ((= bytes-read (array-dimension buffer 0)) buffer)
+    (t (prog1
+	   (loop with buf = (static-vectors:make-static-vector bytes-read)
+	      for i from 0 below bytes-read
+	      do (setf (aref buf i) (aref buffer i))
+	      finally (return buf))
+	 (static-vectors:free-static-vector buffer)))))
+     
+
 (defun usb-bulk-write (handle endpoint buffer timeout)
   "Perform a bulk write request to the endpoint, which can
-  alternatively be specified by its address. Buffer should be a
-  foreign array of type vector-unsigned-byte-8. Returns number of
-  bytes written."
+  alternatively be specified by its address. Buffer should be a static
+  vector with element type '(unsigned-byte 8). Returns number of bytes
+  written."
   (unless (integerp endpoint)
     (setf endpoint (usb-endpoint-get-address endpoint)))
   (let* ((bytes-written
 	  (usb-bulk-write* handle endpoint
-			   (grid::foreign-pointer buffer)
-			   (grid:dim0 buffer) timeout)))
+			   (static-vectors:static-vector-pointer buffer)
+			   (array-dimension buffer 0) timeout)))
     (if (< bytes-written 0)
 	(error 'libusb-error :text "Bulk write failed.")
 	bytes-written)))
@@ -408,32 +421,32 @@
 (defun usb-bulk-read (handle endpoint bytes-to-read timeout)
   "Perform a bulk read request to the endpoint, which can be specified
   by its address or pointer to the endpoint. Returns the buffer of
-  bytes read, which is of type vector-unsigned-byte-8."
+  bytes read, which is a static vector with element type
+  '(unsigned-byte 8)."
   (unless (integerp endpoint)
     (setf endpoint (usb-endpoint-get-address endpoint)))
-  (let* ((buffer (grid:make-foreign-array
-		  '(unsigned-byte 8)
-		  :dimensions bytes-to-read))
+  (let* ((buffer (static-vectors:make-static-vector bytes-to-read
+						    :element-type '(unsigned-byte 8)))
 	 (bytes-read
 	  (usb-bulk-read* handle endpoint
-			  (grid::foreign-pointer buffer)
+			  (static-vectors:static-vector-pointer buffer)
 			  bytes-to-read timeout)))
     (if (< bytes-read 0)
 	(error 'libusb-error :text "Bulk read failed.")
-	(grid:slice buffer `((:range 0 ,(- bytes-read 1)))))))
+	(return-static-buffer-with-length buffer bytes-read))))
 
 ;;; Interrupt transfers
 (defun usb-interrupt-write (handle endpoint buffer timeout)
   "Perform an interrupt write request to the endpoint, which can
-  alternatively be specified by its address. Buffer should be a
-  foreign array of type vector-unsigned-byte-8. Returns number of
-  bytes written."
+  alternatively be specified by its address. Buffer should be a static
+  vector with element type '(unsigned-byte 8). Returns number of bytes
+  written."
   (unless (integerp endpoint)
     (setf endpoint (usb-endpoint-get-address endpoint)))
-  (let* ((bytes-to-write (grid:dim0 buffer))
+  (let* ((bytes-to-write (array-dimension buffer 0))
 	 (bytes-written
 	  (usb-interrupt-write* handle endpoint
-				(grid::foreign-pointer buffer)
+				(static-vectors:static-vector-pointer buffer)
 				bytes-to-write timeout)))
     (if (< bytes-written 0)
       (error 'libusb-error :text "Interrupt write failed.")
@@ -442,25 +455,25 @@
 (defun usb-interrupt-read (handle endpoint bytes-to-read timeout)
   "Perform an interrupt read request to the endpoint, which can be
   specified by its address or pointer to the endpoint. Returns the
-  buffer of bytes read, which is of type vector-unsigned-byte-8."
+  buffer of bytes read, which is a static vector with element type
+  '(unsigned-byte 8)."
   (unless (integerp endpoint)
     (setf endpoint (usb-endpoint-get-address endpoint)))
-  (let* ((buffer (grid:make-foreign-array
-		 '(unsigned-byte 8)
-		 :dimensions bytes-to-read))
+  (let* ((buffer (static-vectors:make-static-vector bytes-to-read
+						    :element-type '(unsigned-byte 8)))
 	 (bytes-read
 	  (usb-interrupt-read* handle endpoint
-			       (grid::foreign-pointer buffer)
+			       (static-vectors:static-vector-pointer buffer)
 			       bytes-to-read timeout)))
     (if (< bytes-read 0)
 	(error 'libusb-error :text "Interrupt read failed.")
-	(grid:slice buffer `((:range 0 ,(- bytes-read 1)))))))
+	(return-static-buffer-with-length buffer bytes-read))))
 
 (defun usb-control-msg (handle requesttype request value index buffer timeout)
-  (let* ((bytes-to-write (grid:dim0 buffer))
+  (let* ((bytes-to-write (array-dimension buffer 0))
          (bytes-written
           (usb-control-msg* handle requesttype request value index
-                            (grid::foreign-pointer buffer)
+                            (static-vectors:static-vector-pointer buffer)
                             bytes-to-write timeout)))
     (if (< bytes-written 0)
         (error 'libusb-error :text "Control message failed.")
