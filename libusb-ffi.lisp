@@ -3,6 +3,7 @@
 (in-package #:libusb-ffi)
 
 (define-foreign-library libusb
+  (:bsd "libusb-legacy-0.1.4.4.4.dylib")
   (:unix (:or "libusb-0.1.so.4.4" "libusb-0.1.so.4" "libusb-0.1.so"))
   (:windows "libusb0")
   (t (:default "libusb")))
