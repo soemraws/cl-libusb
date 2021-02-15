@@ -120,11 +120,22 @@
   (libusb-ffi:usb-set-altinterface (usb-handle-pointer device)
 				   setting-or-number))
 
+(defun usb-get-configuration (device)
+  "Returns the current configuration value, or -1 if no configuration is set."
+  (let ((current-config (cffi:foreign-slot-value (usb-device-pointer device) '(:struct libusb-ffi::device) 'libusb-ffi::configuration)))
+    (if (cffi:null-pointer-p current-config)
+	-1
+	(cffi:foreign-slot-value current-config '(:struct libusb-ffi::configuration) 'libusb-ffi::configuration-value))))
+
 (defun usb-set-configuration (device configuration-or-number)
   "Set the given configuration for the handle. The configuration can
   be specified also by its (integer) value."
-  (libusb-ffi:usb-set-configuration (usb-handle-pointer device)
-				    configuration-or-number))
+  (let ((number (if (cffi:pointerp configuration-or-number)
+		    (libusb-ffi::usb-configuration-get-value configuration-or-number)
+		    configuration-or-number)))
+    (if (= (usb-get-configuration device) number)
+	(libusb-ffi:usb-set-configuration (usb-handle-pointer device) number)
+	0)))
 
 (defun usb-simple-setup (device)
   "Set up the device by using the first found configuration, interface

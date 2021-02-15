@@ -35,6 +35,7 @@
 
 	   #:usb-claim-interface
 	   #:usb-release-interface
+	   #:usb-get-configuration
 	   #:usb-set-configuration
 	   #:usb-set-altinterface
 	   
